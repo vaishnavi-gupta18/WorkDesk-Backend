@@ -13,9 +13,14 @@ class project(models.Model):
     status = models.CharField(max_length=100)
     is_pub = models.BooleanField
 
-class member(User):
+class member(models.Model):
+    users = models.OneToOneField(User, on_delete=models.CASCADE)
     projects = models.ManyToManyField(project)
-    
+    fullname = models.CharField(max_length=100, blank=False)
+    position = models.CharField(max_length=100, blank=False)
+    year = models.CharField(max_length=100, blank=False)
+    def __str__(self):
+        return f"{self.fullname}: {self.position},{self.year}"
 
 class list(models.Model):
     title = models.CharField(max_length=100)
