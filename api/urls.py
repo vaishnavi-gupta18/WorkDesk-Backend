@@ -1,4 +1,4 @@
-"""workdesk_project URL Configuration
+"""api URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -22,5 +22,6 @@ from workdesk.views import IndexView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('workdesk/',IndexView.as_view(), name='index'),
-    path('workdesk/projects/',include(router.urls))
+    path('workdesk/api/',include(router.urls)),
+    path('api-auth/',include('rest_framework.urls',namespace='rest_framework'))
 ]
