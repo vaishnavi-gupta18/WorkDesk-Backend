@@ -6,4 +6,4 @@ from datetime import date
 class User(AbstractUser):
   username = models.CharField(max_length=12, blank = False, unique = True)
   def __str__(self):
-        return f"{self.username}: {self.fullname}"
+        return f"{self.username}"
