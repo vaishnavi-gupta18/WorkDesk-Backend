@@ -26,15 +26,15 @@ def Login(request):
 def AfterLogin(request):
     response = request.GET
     code = response["code"]
-    post_data = {'client_id': '{}'.format(config("CLIENT_ID")),
-    'client_secret': '{}'.format(config("CLIENT_SECRET")),
-    'grant_type': 'authorization_code',
-    'redirect_uri': '{}'.format(config("REDIRECT_URI")),
-    'code': '{}'.format(code)
+    post_data = {"client_id":"{}".format(config("CLIENT_ID")),
+    "client_secret":"{}".format(config("CLIENT_SECRET")),
+    "grant_type":"authorization_code",
+    "redirect_uri":"{}".format(config("REDIRECT_URI")),
+    "code":"{}".format(code)
     }
     print(post_data)
-    # r = requests.post('{}'.format(config("CODE_SITE")), data=post_data)
-    # print(r.json())
+    r = requests.post(config("CODE_SITE"), data=post_data)
+    print(r.json())
     return render(request, 'workdesk/login.html')
 
 
