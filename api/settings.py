@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'workdesk',
     'users',
+    'requests',
 ]
 
 MIDDLEWARE = [
@@ -133,9 +134,20 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+DEFAULT_RENDERER_CLASSES = (
+    'rest_framework.renderers.JSONRenderer',
+)
+
+# Only enable the browseable HTML API in dev (DEBUG=True)
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
 
 AUTH_USER_MODEL ='users.User'
 REST_FRAMEWORK = {
+  'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
+    
   'DEFAULT_PERMISSION_CLASSES': (
       'rest_framework.permissions.IsAuthenticated',
   ),

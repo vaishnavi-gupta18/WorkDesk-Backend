@@ -5,22 +5,23 @@ from ckeditor.fields import RichTextField
 from django.contrib.auth import get_user_model
 # Create your models here.
 User = get_user_model()
-class project(models.Model):
-    title = models.CharField(max_length=100)
-    desc = RichTextField()
-    start_date = models.DateTimeField(blank=False)
-    creator = models.PositiveIntegerField(blank=False)
-    status = models.CharField(max_length=100)
-    is_pub = models.BooleanField
 
 class member(models.Model):
     users = models.OneToOneField(User, on_delete=models.CASCADE)
-    projects = models.ManyToManyField(project)
     fullname = models.CharField(max_length=100, blank=False)
     position = models.CharField(max_length=100, blank=False)
     year = models.CharField(max_length=100, blank=False)
     def __str__(self):
         return f"{self.fullname}: {self.position},{self.year}"
+
+class project(models.Model):
+    title = models.CharField(max_length=100)
+    desc = RichTextField()
+    start_date = models.DateTimeField(blank=False)
+    creator = models.PositiveIntegerField(blank=False)
+    members = models.ManyToManyField(member)
+    status = models.CharField(max_length=100)
+    is_pub = models.BooleanField
 
 class list(models.Model):
     title = models.CharField(max_length=100)
