@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from drf_writable_nested.serializers import WritableNestedModelSerializer
 
 from users.models import User
 from .models import Project,List,Member,Card
@@ -15,7 +14,7 @@ class MemberSerializer(serializers.ModelSerializer):
   class Meta:
       model = Member
       fields = ['id','users','fullname','position','year']
-      
+
 
 class CardSerializer(serializers.ModelSerializer):
   class Meta:

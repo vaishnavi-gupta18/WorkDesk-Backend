@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class Member(models.Model):
-    users = models.OneToOneField(User, on_delete=models.CASCADE)
+    users = models.OneToOneField(User, related_name='member', on_delete=models.CASCADE)
     fullname = models.CharField(max_length=100, blank=False)
     position = models.CharField(max_length=100, blank=False)
     year = models.CharField(max_length=100, blank=False)

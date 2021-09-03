@@ -1,18 +1,39 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission,SAFE_METHODS
 from .models import Member
 
-class ProjectWritePermission(BasePermission):
+class IsTeamMemberOrAdmin(BasePermission):
     message = 'Permission denied'
-    def has_object_permissions(self,request,view,obj):
-        if request.method in SAFE_METHODS or request.user.is_admin:
+    def has_object_permission(self,request,view,obj):
+        if request.method in SAFE_METHODS:
             return True
         try:
-            Members = Member.objects.filter(Projects__id = obj.id)
-            print(Members)
+            if request.user.groups.get(name='admins'):
+                return True
         except:
             pass
-
-        if request.user in Members:
-            return True
+        try:
+            if request.user.member in obj.members.all():
+                return True
+        except:
+            pass
+        try:
+            if request.user.member in obj.project.members.all():
+                return True
+        except:
+            pass
+        try:
+            if request.user.member in obj.list.project.members.all():
+                return True
+        except:
+            pass
         return False
-        
+
+class IsAdmin(BasePermission):
+    message = 'Permission denied'
+    def has_permission(self,request,view):
+        try:
+            if request.user.groups.get(name='admins'):
+                return True
+        except:
+            pass
+        return False
