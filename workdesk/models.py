@@ -21,7 +21,7 @@ class Project(models.Model):
     creator = models.CharField(max_length=12)
     members = models.ManyToManyField(Member)
     status = models.CharField(max_length=100)
-    is_public = models.BooleanField
+    is_public = models.BooleanField()
     def __str__(self):
         return f"{self.title}: {self.description},{self.start_date},{self.creator},{self.status},{self.is_public}"
 

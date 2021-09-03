@@ -6,10 +6,6 @@ class UserSerializer(serializers.ModelSerializer):
       model = User
       fields = ['id','username','groups']
 
-class ProjectSerializer(serializers.ModelSerializer):
-  class Meta:
-      model = Project
-      fields = ['id','title','description','start_date','creator','members','status','is_public']
 
 
 
@@ -25,7 +21,12 @@ class CardSerializer(serializers.ModelSerializer):
 
 
 class ListSerializer(serializers.ModelSerializer):
-  card = CardSerializer(many=True)
   class Meta:
       model = List
-      fields = ['id','title','start_date','project','card']
+      fields = ['id','title','start_date','project']
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+  class Meta:
+      model = Project
+      fields = ['id','title','description','start_date','creator','members','status','is_public']
