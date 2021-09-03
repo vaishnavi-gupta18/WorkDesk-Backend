@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 # Create your models here.
 User = get_user_model()
 
-class member(models.Model):
+class Member(models.Model):
     users = models.OneToOneField(User, on_delete=models.CASCADE)
     fullname = models.CharField(max_length=100, blank=False)
     position = models.CharField(max_length=100, blank=False)
@@ -14,27 +14,32 @@ class member(models.Model):
     def __str__(self):
         return f"{self.fullname}: {self.position},{self.year}"
 
-class project(models.Model):
+class Project(models.Model):
     title = models.CharField(max_length=100)
-    desc = RichTextField()
+    description = RichTextField()
     start_date = models.DateTimeField(blank=False)
     creator = models.PositiveIntegerField(blank=False)
-    members = models.ManyToManyField(member)
+    members = models.ManyToManyField(Member)
     status = models.CharField(max_length=100)
-    is_pub = models.BooleanField
+    is_public = models.BooleanField
+    def __str__(self):
+        return f"{self.title}: {self.description},{self.start_date},{self.creator},{self.status},{self.is_public}"
 
-class list(models.Model):
+class List(models.Model):
     title = models.CharField(max_length=100)
     start_date = models.DateTimeField(blank=False)
-    project_id = models.ForeignKey(to=project, on_delete=models.CASCADE)
+    project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.title}: {self.start_date},{self.project}"
     
-class card(models.Model):
+class Card(models.Model):
     title = models.CharField(max_length=100)
-    desc = RichTextField()
+    description = RichTextField()
     start_date = models.DateTimeField(blank=False)
     due_date = models.DateTimeField(blank=False)
     creator = models.PositiveIntegerField(blank=False)
-    assignees = models.ManyToManyField(member)
-    list_id = models.ForeignKey(to=list, on_delete=models.CASCADE)
-
+    assignees = models.ManyToManyField(Member)
+    list = models.ForeignKey(to=List, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.title}: {self.description},{self.start_date},{self.due_date},{self.creator},{self.list}"
 

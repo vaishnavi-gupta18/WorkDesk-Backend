@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission
-from .models import member
+from .models import Member
 
 class ProjectWritePermission(BasePermission):
     message = 'Permission denied'
@@ -7,12 +7,12 @@ class ProjectWritePermission(BasePermission):
         if request.method in SAFE_METHODS or request.user.is_admin:
             return True
         try:
-            members = member.objects.filter(projects__id = obj.id)
-            print(members)
+            Members = Member.objects.filter(Projects__id = obj.id)
+            print(Members)
         except:
             pass
 
-        if request.user in members:
+        if request.user in Members:
             return True
         return False
         

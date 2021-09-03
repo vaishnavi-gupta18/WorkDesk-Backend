@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import project,member,list,card
+from .models import Project,Member,List,Card
 # Register your models here.
-admin.site.register(project)
-admin.site.register(member)
-admin.site.register(list)
-admin.site.register(card)
+admin.site.register(Project)
+admin.site.register(Member)
+admin.site.register(List)
+admin.site.register(Card)
