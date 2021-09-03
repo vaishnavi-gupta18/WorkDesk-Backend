@@ -7,19 +7,22 @@ from django.contrib.auth import login,authenticate
 from decouple import config
 
 from .models import User
+from workdesk.models import Member
 
 
 class UserBackend:
-    def authenticate(self,request,user_name):
+    def authenticate(self,request,user_name,full_name,current_year):
         if user_name:
             try:
                 user = User.objects.get(username=user_name)
                 return user
             except User.DoesNotExist:
                 User.objects.create(username=user_name)
+                user = User.objects.get(username=user_name)
                 group = Group.objects.get(name='normaluser')
-                User.groups.add(group)
-        return None
+                user.groups.add(group)
+                Member.objects.create(users=user, fullname=full_name, year=current_year)
+        return user
     
     def get_user(self,user_id):
         try:
@@ -64,7 +67,7 @@ def AfterLogin(request):
             if roles[i]["role"] == 'Maintainer':
                 roles_check=True
         if roles_check:
-            user = authenticate(user_name=data["username"])
+            user = authenticate(user_name=data["username"],full_name=data["person"]["fullName"],current_year=data["student"]["currentYear"])
             user.save()
             login(request,user)
         else:

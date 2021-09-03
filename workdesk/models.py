@@ -18,7 +18,7 @@ class Project(models.Model):
     title = models.CharField(max_length=100)
     description = RichTextField()
     start_date = models.DateTimeField(blank=False)
-    creator = models.PositiveIntegerField(blank=False)
+    creator = models.CharField(max_length=12)
     members = models.ManyToManyField(Member)
     status = models.CharField(max_length=100)
     is_public = models.BooleanField
@@ -37,7 +37,7 @@ class Card(models.Model):
     description = RichTextField()
     start_date = models.DateTimeField(blank=False)
     due_date = models.DateTimeField(blank=False)
-    creator = models.PositiveIntegerField(blank=False)
+    creator = models.CharField(max_length=12)
     assignees = models.ManyToManyField(Member)
     list = models.ForeignKey(to=List, on_delete=models.CASCADE)
     def __str__(self):

@@ -4,24 +4,28 @@ from .models import Project,List,Member,Card
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
       model = User
-      fields = "__all__"
+      fields = ['id','username','groups']
 
 class ProjectSerializer(serializers.ModelSerializer):
   class Meta:
       model = Project
-      fields = "__all__"
+      fields = ['id','title','description','start_date','creator','members','status','is_public']
 
-class ListSerializer(serializers.ModelSerializer):
-  class Meta:
-      model = List
-      fields = "__all__"
+
 
 class MemberSerializer(serializers.ModelSerializer):
   class Meta:
       model = Member
-      fields = "__all__"
+      fields = ['id','users','fullname','position','year']
 
 class CardSerializer(serializers.ModelSerializer):
   class Meta:
       model = Card
-      fields = "__all__"
+      fields = ['id','title','description','start_date','due_date','creator','assignees','list']
+
+
+class ListSerializer(serializers.ModelSerializer):
+  card = CardSerializer(many=True)
+  class Meta:
+      model = List
+      fields = ['id','title','start_date','project','card']
