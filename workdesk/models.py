@@ -28,7 +28,7 @@ class Project(models.Model):
 class List(models.Model):
     title = models.CharField(max_length=100)
     start_date = models.DateTimeField(blank=False)
-    project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(to=Project, related_name='lists', on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.title}: {self.start_date},{self.project}"
     
@@ -39,7 +39,7 @@ class Card(models.Model):
     due_date = models.DateTimeField(blank=False)
     creator = models.CharField(max_length=12)
     assignees = models.ManyToManyField(Member)
-    list = models.ForeignKey(to=List, on_delete=models.CASCADE)
+    list = models.ForeignKey(to=List,related_name='cards',on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.title}: {self.description},{self.start_date},{self.due_date},{self.creator},{self.list}"
 
