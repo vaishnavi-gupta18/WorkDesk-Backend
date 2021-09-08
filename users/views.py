@@ -4,12 +4,13 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth.models import Group
 import requests
 from django.contrib.auth import login, authenticate, logout
-from decouple import config
+
 
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
 
+from decouple import config
 from .models import User
 from workdesk.models import Member
 
@@ -110,6 +111,9 @@ def login_response(request):
 
 
 def logout_user(request):
+    """
+    Logout user.
+    """
     if request.user.is_authenticated:
         logout(request)
         return redirect('/workdesk')

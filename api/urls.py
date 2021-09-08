@@ -18,13 +18,11 @@ from django.urls import path, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 from workdesk.urls import router
-from workdesk.views import IndexView
 from users.views import login_response, login_redirect, logout_user
 
 from decouple import config
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('workdesk/', IndexView.as_view(), name='index'),
     path('workdesk/login', login_redirect, name='login'),
     path('workdesk/logout', logout_user, name='logout'),
     path('workdesk/api/', include(router.urls)),

@@ -1,9 +1,10 @@
 from django.db import models
 from django.conf import settings
 from django.db.models.fields import DateTimeField
-from ckeditor.fields import RichTextField
 from django.contrib.auth import get_user_model
-# Create your models here.
+
+from ckeditor.fields import RichTextField
+
 User = get_user_model()
 
 
