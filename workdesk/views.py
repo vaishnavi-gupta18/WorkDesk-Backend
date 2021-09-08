@@ -8,12 +8,12 @@ from django.template.context import Context
 from django.views import generic
 from django.contrib.auth.views import LoginView
 from rest_framework import viewsets
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser,IsAuthenticated
 from decouple import config
 import requests
 
-from .serializers import ProjectSerializer,ListSerializer,CardSerializer,MemberSerializer
-from .models import Project,List,Member,Card
+from .serializers import ProjectSerializer,ListSerializer,CardSerializer,MemberSerializer,CommentSerializer
+from .models import Project,List,Member,Card,Comment
 from .permissions import IsTeamMemberOrAdmin,IsAdmin
 
 class IndexView(generic.ListView):
@@ -45,3 +45,9 @@ class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
     permission_classes = [IsAdmin]
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]

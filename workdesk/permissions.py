@@ -32,6 +32,11 @@ class IsAdmin(BasePermission):
     message = 'Permission denied'
     def has_permission(self,request,view):
         try:
+            if request.method in SAFE_METHODS:
+                return True
+        except:
+            pass
+        try:
             if request.user.groups.get(name='admins'):
                 return True
         except:

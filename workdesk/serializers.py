@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from users.models import User
-from .models import Project,List,Member,Card
+from .models import Project,List,Member,Card,Comment
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -14,6 +14,12 @@ class MemberSerializer(serializers.ModelSerializer):
   class Meta:
       model = Member
       fields = ['id','users','fullname','position','year']
+
+
+class CommentSerializer(serializers.ModelSerializer):
+  class Meta:
+      model = Comment
+      fields = ['id','member','card','date_created','body']
 
 
 class CardSerializer(serializers.ModelSerializer):

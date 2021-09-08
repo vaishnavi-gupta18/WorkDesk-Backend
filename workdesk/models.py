@@ -43,3 +43,10 @@ class Card(models.Model):
     def __str__(self):
         return f"{self.title}: {self.description},{self.start_date},{self.due_date},{self.creator},{self.list}"
 
+class Comment(models.Model):
+    member = models.ForeignKey(to=Member, related_name='comments',on_delete=models.CASCADE)
+    card = models.ForeignKey(to=Card, related_name='comments_card',on_delete=models.CASCADE)
+    date_created = models.DateTimeField(blank=False)
+    body = models.CharField(max_length=250)
+    def __str__(self):
+        return f"{self.member},{self.card},{self.date_created},{self.body}"

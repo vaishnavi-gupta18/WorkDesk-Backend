@@ -38,14 +38,14 @@ def AfterLogin(request):
     response = request.GET
     try:
         code = response["code"]
-        post_data = {'client_id':'{}'.format(config("CLIENT_ID")),
-        "client_secret":"{}".format(config("CLIENT_SECRET")),
-        "grant_type":"authorization_code",
-        "redirect_uri":"{}".format(config("REDIRECT_URI")),
-        "code":"{}".format(code)
+        post_data = {'client_id': f"{config('CLIENT_ID')}",
+        "client_secret": f"{config('CLIENT_SECRET')}",
+        "grant_type": "authorization_code",
+        "redirect_uri": f"{config('REDIRECT_URI')}",
+        "code": f"{code}"
         }
 
-        token_request = requests.post('{}'.format(config("CODE_SITE")), data=post_data)
+        token_request = requests.post(f"{config('CODE_SITE')}", data=post_data)
         if token_request.status_code == 200:
             response = token_request.json()
         else:
@@ -55,7 +55,8 @@ def AfterLogin(request):
                 return HttpResponse(status=token_request.status_code) 
 
         access_token=response["access_token"]
-        data_request=requests.get('{}'.format(config("TOKEN_SITE")), headers={"Authorization":"Bearer {}".format(access_token)})
+        refresh_token=response["refresh_token"]
+        data_request=requests.get(f"{config('TOKEN_SITE')}", headers={"Authorization":f"Bearer {access_token}"})
         if data_request.status_code == 200:
             data = data_request.json()
         else:

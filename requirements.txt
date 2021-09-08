@@ -9,6 +9,8 @@ django-js-asset==1.2.2
 djangorestframework==3.12.4
 djangorestframework-jwt==1.11.0
 djangorestframework-simplejwt==4.8.0
+drf-nested-routers==0.93.3
+drf-writable-nested==0.6.3
 idna==3.2
 isort==5.9.3
 lazy-object-proxy==1.6.0
