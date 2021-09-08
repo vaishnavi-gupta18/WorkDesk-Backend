@@ -14,21 +14,21 @@
 #     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 # """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 from workdesk.urls import router
 from workdesk.views import IndexView
-from users.views import login_user,afterLogin,logout_user
+from users.views import login_response, login_redirect, logout_user
 
 from decouple import config
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('workdesk/',IndexView.as_view(), name='index'),
-    path('workdesk/login',login_user, name='login'),
-    path('workdesk/logout',logout_user, name='logout'),
-    path('workdesk/api/',include(router.urls)),
-    path('api-auth/',include('rest_framework.urls',namespace='rest_framework')),
-    path('workdesk/after_login',afterLogin, name='after_login'),
+    path('workdesk/', IndexView.as_view(), name='index'),
+    path('workdesk/login', login_redirect, name='login'),
+    path('workdesk/logout', logout_user, name='logout'),
+    path('workdesk/api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('workdesk/after_login', login_response, name='after_login'),
     
 ]

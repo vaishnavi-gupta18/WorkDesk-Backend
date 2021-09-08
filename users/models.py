@@ -6,6 +6,11 @@ from datetime import date
 
 
 class User(AbstractUser):
+    """
+    User details.
+
+    Auth details of registered users.
+    """
     username = models.CharField(max_length=12, blank=False, unique=True)
 
     def __str__(self):

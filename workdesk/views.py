@@ -5,11 +5,12 @@ from django.http import HttpResponse
 from django.views import generic
 from django.contrib.auth.views import LoginView
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from decouple import config
 
 from .serializers import ProjectSerializer, ListSerializer, CardSerializer, MemberSerializer, CommentSerializer
 from .models import Project, List, Member, Card, Comment
-from .permissions import IsTeamMemberOrAdmin, IsAdmin, IsOwnerorReadOnly
+from .permissions import IsProjectMemberOrAdmin, IsListMemberOrAdmin, IsCardMemberOrAdmin, IsAdmin, IsOwnerorReadOnly
 
 
 class IndexView(generic.ListView):
@@ -22,28 +23,28 @@ class IndexView(generic.ListView):
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsTeamMemberOrAdmin]
+    permission_classes = [IsProjectMemberOrAdmin, IsAuthenticated]
 
 
 class ListViewSet(viewsets.ModelViewSet):
     queryset = List.objects.all()
     serializer_class = ListSerializer
-    permission_classes = [IsTeamMemberOrAdmin]
+    permission_classes = [IsListMemberOrAdmin, IsAuthenticated]
 
 
 class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
-    permission_classes = [IsTeamMemberOrAdmin]
+    permission_classes = [IsCardMemberOrAdmin, IsAuthenticated]
 
 
 class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAdmin, IsAuthenticated]
 
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsOwnerorReadOnly]
+    permission_classes = [IsOwnerorReadOnly, IsAuthenticated]
