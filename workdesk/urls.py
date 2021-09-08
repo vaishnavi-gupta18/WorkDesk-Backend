@@ -1,6 +1,6 @@
 # from rest_framework_nested import routers
 from rest_framework import routers
-from .views import ProjectViewSet,ListViewSet,CardViewSet,MemberViewSet,CommentViewSet
+from .views import ProjectViewSet, ListViewSet, CardViewSet, MemberViewSet, CommentViewSet
 
 # router = routers.SimpleRouter()
 # router.register('Project',ProjectViewSet)
@@ -10,8 +10,8 @@ from .views import ProjectViewSet,ListViewSet,CardViewSet,MemberViewSet,CommentV
 
 router = routers.DefaultRouter()
 
-router.register('Project',ProjectViewSet)
-router.register('List',ListViewSet)
-router.register('Card',CardViewSet)
-router.register('Member',MemberViewSet)
-router.register('Comment',CommentViewSet)
+router.register('Project', ProjectViewSet)
+router.register('List', ListViewSet)
+router.register('Card', CardViewSet)
+router.register('Member', MemberViewSet)
+router.register('Comment', CommentViewSet)
