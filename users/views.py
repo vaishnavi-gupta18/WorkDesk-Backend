@@ -1,9 +1,9 @@
 from django.shortcuts import render,redirect
 from django.http.response import Http404
-from django.http import HttpResponse 
+from django.http import HttpResponse,HttpResponseForbidden
 from django.contrib.auth.models import Group
 import requests
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import login,authenticate,logout
 from decouple import config
 
 from .models import User
@@ -31,10 +31,10 @@ class UserBackend:
             return None
 
 
-def Login(request):  
+def login_user(request):  
     return redirect('{}client_id={}&redirect_uri={}'.format(config("SITE"),config("CLIENT_ID"),config("REDIRECT_URI")))
 
-def AfterLogin(request):
+def afterLogin(request):
     response = request.GET
     try:
         code = response["code"]
@@ -67,6 +67,7 @@ def AfterLogin(request):
         for i in range(len(roles)):
             if roles[i]["role"] == 'Maintainer':
                 roles_check=True
+                
         if roles_check:
             user = authenticate(user_name=data["username"],full_name=data["person"]["fullName"],current_year=data["student"]["currentYear"])
             user.save()
@@ -76,5 +77,12 @@ def AfterLogin(request):
     except:
         raise Http404("Page not found")
     return render(request, 'workdesk/login.html')
+
+def logout_user(request):
+    if request.user.is_authenticated:
+        logout(request)
+        return redirect('/workdesk')
+    else:
+        return HttpResponseForbidden()
 
 

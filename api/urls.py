@@ -19,15 +19,16 @@ from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 from workdesk.urls import router
 from workdesk.views import IndexView
-from users.views import Login,AfterLogin
+from users.views import login_user,afterLogin,logout_user
 
 from decouple import config
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('workdesk/',IndexView.as_view(), name='index'),
-    path('workdesk/login',Login, name='login'),
+    path('workdesk/login',login_user, name='login'),
+    path('workdesk/logout',logout_user, name='logout'),
     path('workdesk/api/',include(router.urls)),
     path('api-auth/',include('rest_framework.urls',namespace='rest_framework')),
-    path('workdesk/after_login',AfterLogin, name='after_login'),
+    path('workdesk/after_login',afterLogin, name='after_login'),
     
 ]
