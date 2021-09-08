@@ -28,6 +28,7 @@ class IsTeamMemberOrAdmin(BasePermission):
             pass
         return False
 
+
 class IsAdmin(BasePermission):
     message = 'Permission denied'
     def has_permission(self,request,view):
@@ -38,6 +39,19 @@ class IsAdmin(BasePermission):
             pass
         try:
             if request.user.groups.get(name='admins'):
+                return True
+        except:
+            pass
+        return False
+
+
+class IsOwnerorReadOnly(BasePermission):
+    message = 'Permission denied'
+    def has_object_permission(self,request,view,obj):
+        if request.method in SAFE_METHODS:
+            return True
+        try:
+            if request.user.member == obj.member:
                 return True
         except:
             pass
