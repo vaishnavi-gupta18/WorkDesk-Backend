@@ -55,8 +55,18 @@ class ProjectSerializer(serializers.ModelSerializer):
     """
     Nested ModelSerializer for Project model including lists,cards
     """
-    lists = ListSerializer(many=True)
+    lists = ListSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
         fields = ['id', 'title', 'description', 'start_date', 'creator', 'members', 'status', 'is_public', 'lists']
+
+
+class ShortProjectSerializer(serializers.ModelSerializer):
+    """
+    ModelSerializer for Project model 
+    """
+
+    class Meta:
+        model = Project
+        fields = ['id', 'title', 'description', 'start_date', 'creator', 'members', 'status', 'is_public']

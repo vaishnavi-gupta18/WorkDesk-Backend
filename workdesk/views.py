@@ -7,11 +7,12 @@ from django.contrib.auth.views import LoginView
 
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from decouple import config
 from users.models import User
 from .models import Project, List, Member, Card, Comment
-from .serializers import UserSerializer, ProjectSerializer, ListSerializer, CardSerializer, MemberSerializer, CommentSerializer
+from .serializers import UserSerializer, ProjectSerializer, ListSerializer, CardSerializer, MemberSerializer, CommentSerializer,ShortProjectSerializer
 from .permissions import IsProjectMemberOrAdmin, IsListMemberOrAdmin, IsCardMemberOrAdmin, IsAdmin, IsOwnerorReadOnly
 
 
@@ -36,6 +37,27 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     permission_classes = [IsProjectMemberOrAdmin, IsAuthenticated]
 
+    def perform_create(self,serializer):
+       project_creator=Member.objects.get(users=self.request.user)
+       serializer.save(creator = project_creator)
+
+    def dispatch(self, *args, **kwargs):
+        response = super(ProjectViewSet, self).dispatch(*args, **kwargs)
+        response['Access-Control-Allow-Origin']='http://localhost:3000'
+        response['Access-Control-Allow-Credentials']='true'
+    
+        return response
+
+
+class ShortProjectViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewset for model Project
+
+    """
+    queryset = Project.objects.all()
+    serializer_class = ShortProjectSerializer
+    permission_classes = [IsProjectMemberOrAdmin, IsAuthenticated]
+
 
 class ListViewSet(viewsets.ModelViewSet):
     """
@@ -46,7 +68,11 @@ class ListViewSet(viewsets.ModelViewSet):
     queryset = List.objects.all()
     serializer_class = ListSerializer
     permission_classes = [IsListMemberOrAdmin, IsAuthenticated]
-
+    
+    # def list(self, request, project_pk=None):
+    #     queryset = List.objects.filter(project=project_pk)
+    #     serializer = ListSerializer(queryset, many=True)
+    #     return Response(serializer.data)
 
 class CardViewSet(viewsets.ModelViewSet):
     """

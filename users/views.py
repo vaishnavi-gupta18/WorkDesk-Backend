@@ -107,7 +107,7 @@ def login_response(request):
             return HttpResponseForbidden("Site is accessible to maintainers only")
     except:
         raise Http404("Page not found")
-    return HttpResponse('Logged into WorkDesk Successfully')
+    return HttpResponse(request.user)
 
 
 def logout_user(request):
@@ -116,6 +116,6 @@ def logout_user(request):
     """
     if request.user.is_authenticated:
         logout(request)
-        return redirect('/workdesk')
+        return HttpResponse('Logged out Successfully')
     else:
         return HttpResponseForbidden()
