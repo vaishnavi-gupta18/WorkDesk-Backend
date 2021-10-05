@@ -35,7 +35,15 @@ class UserBackend:
                 user = User.objects.get(username=user_name)
                 group = Group.objects.get(name='normaluser')
                 user.groups.add(group)
-                Member.objects.create(users=user, fullname=full_name, year=current_year)
+                if current_year == 1:
+                    position = 'Webmaster'
+                elif current_year == 2:
+                    position = 'Project Associate'
+                elif (current_year == 3) or (current_year == 4):
+                    position = 'Project Leader'
+                else:
+                    position = 'Emeritus Coordinator'
+                Member.objects.create(users=user, fullname=full_name, year=current_year, position = position)
         return user
   
     def get_user(self, user_id):
@@ -107,7 +115,8 @@ def login_response(request):
             return HttpResponseForbidden("Site is accessible to maintainers only")
     except:
         raise Http404("Page not found")
-    return HttpResponse(request.user)
+    member = Member.objects.get(users=request.user)
+    return HttpResponse(member.id)
 
 
 def logout_user(request):

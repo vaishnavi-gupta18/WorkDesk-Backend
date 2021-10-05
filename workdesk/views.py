@@ -11,9 +11,21 @@ from rest_framework.response import Response
 
 from decouple import config
 from users.models import User
+from django.contrib.auth.models import Group
 from .models import Project, List, Member, Card, Comment
-from .serializers import UserSerializer, ProjectSerializer, ListSerializer, CardSerializer, MemberSerializer, CommentSerializer,ShortProjectSerializer
+from .serializers import GroupSerializer, UserSerializer, ProjectSerializer, ListSerializer, CardSerializer, MemberSerializer, CommentSerializer,ShortProjectSerializer
 from .permissions import IsProjectMemberOrAdmin, IsListMemberOrAdmin, IsCardMemberOrAdmin, IsAdmin, IsOwnerorReadOnly
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewset for User Group
+
+    Make user either an admin or a normal user
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [IsAdmin, IsAuthenticated]
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -54,9 +66,15 @@ class ShortProjectViewSet(viewsets.ModelViewSet):
     ModelViewset for model Project
 
     """
-    queryset = Project.objects.all()
     serializer_class = ShortProjectSerializer
     permission_classes = [IsProjectMemberOrAdmin, IsAuthenticated]
+
+    def get_queryset(self):
+        project_creator=Member.objects.get(users=self.request.user)
+        queryset = (Project.objects.filter(is_public=True)) | (Project.objects.filter(is_public=True))
+        return queryset
+
+
 
 
 class ListViewSet(viewsets.ModelViewSet):
@@ -68,6 +86,13 @@ class ListViewSet(viewsets.ModelViewSet):
     queryset = List.objects.all()
     serializer_class = ListSerializer
     permission_classes = [IsListMemberOrAdmin, IsAuthenticated]
+
+    def dispatch(self, *args, **kwargs):
+        response = super(ListViewSet, self).dispatch(*args, **kwargs)
+        response['Access-Control-Allow-Origin']='http://localhost:3000'
+        response['Access-Control-Allow-Credentials']='true'
+    
+        return response
     
     # def list(self, request, project_pk=None):
     #     queryset = List.objects.filter(project=project_pk)
@@ -83,6 +108,17 @@ class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
     permission_classes = [IsCardMemberOrAdmin, IsAuthenticated]
+
+    def perform_create(self,serializer):
+       card_creator=Member.objects.get(users=self.request.user)
+       serializer.save(creator = card_creator)
+
+    def dispatch(self, *args, **kwargs):
+        response = super(CardViewSet, self).dispatch(*args, **kwargs)
+        response['Access-Control-Allow-Origin']='http://localhost:3000'
+        response['Access-Control-Allow-Credentials']='true'
+    
+        return response
 
 
 class MemberViewSet(viewsets.ModelViewSet):

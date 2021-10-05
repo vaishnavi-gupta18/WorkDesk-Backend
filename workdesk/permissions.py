@@ -15,7 +15,7 @@ class IsProjectMemberOrAdmin(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         try:
-            if request.user.groups.get(name='admins'):
+            if request.user.groups.get(name='admin'):
                 return True
         except:
             pass
@@ -36,7 +36,7 @@ class IsListMemberOrAdmin(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         try:
-            if request.user.groups.get(name='admins'):
+            if request.user.groups.get(name='admin'):
                 return True
         except:
             pass
@@ -57,7 +57,7 @@ class IsCardMemberOrAdmin(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         try:
-            if request.user.groups.get(name='admins'):
+            if request.user.groups.get(name='admin'):
                 return True
         except:
             pass
@@ -78,7 +78,7 @@ class IsAdmin(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         try:
-            if request.user.groups.get(name='admins'):
+            if request.user.groups.get(name='admin'):
                 return True
         except:
             pass
@@ -98,7 +98,7 @@ class IsOwnerorReadOnly(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         try:
-            if request.user.groups.get(name='admins'):
+            if request.user.groups.get(name='admin'):
                 return True
         except:
             pass

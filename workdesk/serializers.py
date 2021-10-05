@@ -1,16 +1,28 @@
 from rest_framework import serializers
+from django.contrib.auth.models import Group
 
 from users.models import User
 from .models import Project, List, Member, Card, Comment
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    """
+    ModelSerializer for User Group
+    """
+    class Meta:
+        model = Group
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
     """
     ModelSerializer for User model
     """
+    groups = GroupSerializer(many=True)
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'groups']
+        fields = ['id', 'username', 'groups', 'is_active']
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -44,7 +56,7 @@ class ListSerializer(serializers.ModelSerializer):
     """
     Nested ModelSerializer for List model including cards
     """
-    cards = CardSerializer(many=True)
+    cards = CardSerializer(many=True, read_only=True)
 
     class Meta:
         model = List
