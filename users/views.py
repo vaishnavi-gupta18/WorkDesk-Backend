@@ -119,6 +119,27 @@ def login_response(request):
     return HttpResponse(member.id)
 
 
+@api_view(['GET'])
+def check_login(request):
+    """
+    checks if the user is logged in
+    """
+    content = {
+        "logged_in": False
+    }
+    if request.user.is_authenticated:
+        content["logged_in"] = True
+        res = Response(content, status=status.HTTP_202_ACCEPTED)
+        res['Access-Control-Allow-Origin'] = 'http://127.0.0.1:3000'
+        res['Access-Control-Allow-Credentials'] = 'true'
+        return res
+    else:
+        res = Response(content, status=status.HTTP_401_UNAUTHORIZED)
+        res['Access-Control-Allow-Origin'] = 'http://127.0.0.1:3000'
+        res['Access-Control-Allow-Credentials'] = 'true'
+        return res
+
+
 def logout_user(request):
     """
     Logout user.

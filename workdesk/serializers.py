@@ -11,14 +11,13 @@ class GroupSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Group
-        fields = '__all__'
+        fields = ['id', 'name']
 
 
 class UserSerializer(serializers.ModelSerializer):
     """
     ModelSerializer for User model
     """
-    groups = GroupSerializer(many=True)
 
     class Meta:
         model = User
@@ -68,7 +67,17 @@ class ProjectSerializer(serializers.ModelSerializer):
     Nested ModelSerializer for Project model including lists,cards
     """
     lists = ListSerializer(many=True, read_only=True)
+    class Meta:
+        model = Project
+        fields = ['id', 'title', 'description', 'start_date', 'creator', 'members', 'status', 'is_public', 'lists']
 
+
+class DetailedProjectSerializer(serializers.ModelSerializer):
+    """
+    Nested ModelSerializer for Project model including lists,cards
+    """
+    lists = ListSerializer(many=True, read_only=True)
+    members = MemberSerializer(many=True, read_only=True)
     class Meta:
         model = Project
         fields = ['id', 'title', 'description', 'start_date', 'creator', 'members', 'status', 'is_public', 'lists']
@@ -78,7 +87,7 @@ class ShortProjectSerializer(serializers.ModelSerializer):
     """
     ModelSerializer for Project model 
     """
-
+    members = MemberSerializer(many=True, read_only=True)
     class Meta:
         model = Project
         fields = ['id', 'title', 'description', 'start_date', 'creator', 'members', 'status', 'is_public']

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'workdesk',
     'users',
     'requests',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +77,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'api.wsgi.application'
+
+ASGI_APPLICATION = 'api.asgi.application'
+
 AUTHENTICATION_BACKENDS = ['users.views.UserBackend','django.contrib.auth.backends.ModelBackend']
 
 # Database
@@ -159,6 +163,15 @@ REST_FRAMEWORK = {
 }
 # SESSION_COOKIE_SAMESITE = 'None'
 # CSRF_COOKIE_SAMESITE = 'None'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 CORS_ALLOW_CREDENTIALS = True
 

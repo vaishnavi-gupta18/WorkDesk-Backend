@@ -13,7 +13,7 @@ from decouple import config
 from users.models import User
 from django.contrib.auth.models import Group
 from .models import Project, List, Member, Card, Comment
-from .serializers import GroupSerializer, UserSerializer, ProjectSerializer, ListSerializer, CardSerializer, MemberSerializer, CommentSerializer,ShortProjectSerializer
+from .serializers import GroupSerializer, UserSerializer, ProjectSerializer, ListSerializer, CardSerializer, MemberSerializer, CommentSerializer,ShortProjectSerializer, DetailedProjectSerializer
 from .permissions import IsProjectMemberOrAdmin, IsListMemberOrAdmin, IsCardMemberOrAdmin, IsAdmin, IsOwnerorReadOnly
 
 
@@ -38,6 +38,13 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAdmin, IsAuthenticated]
 
+    def dispatch(self, *args, **kwargs):
+        response = super(UserViewSet, self).dispatch(*args, **kwargs)
+        response['Access-Control-Allow-Origin']='http://localhost:3000'
+        response['Access-Control-Allow-Credentials']='true'
+    
+        return response
+
 
 class ProjectViewSet(viewsets.ModelViewSet):
     """
@@ -46,8 +53,14 @@ class ProjectViewSet(viewsets.ModelViewSet):
     Create,Delete,Update a project
     """
     queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
+    # serializer_class = ProjectSerializer
     permission_classes = [IsProjectMemberOrAdmin, IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return DetailedProjectSerializer
+        return ProjectSerializer
+
 
     def perform_create(self,serializer):
        project_creator=Member.objects.get(users=self.request.user)
@@ -71,10 +84,22 @@ class ShortProjectViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         project_creator=Member.objects.get(users=self.request.user)
-        queryset = (Project.objects.filter(is_public=True)) | (Project.objects.filter(is_public=True))
+        queryset = (Project.objects.filter(is_public=True)) 
         return queryset
 
 
+class UserProjectViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewset for all the projects of current user
+
+    """
+    serializer_class = ProjectSerializer
+    permission_classes = [IsProjectMemberOrAdmin, IsAuthenticated]
+
+    def get_queryset(self):
+        project_member=Member.objects.get(users=self.request.user)
+        queryset = (Project.objects.filter(members=project_member))
+        return queryset
 
 
 class ListViewSet(viewsets.ModelViewSet):
@@ -93,11 +118,6 @@ class ListViewSet(viewsets.ModelViewSet):
         response['Access-Control-Allow-Credentials']='true'
     
         return response
-    
-    # def list(self, request, project_pk=None):
-    #     queryset = List.objects.filter(project=project_pk)
-    #     serializer = ListSerializer(queryset, many=True)
-    #     return Response(serializer.data)
 
 class CardViewSet(viewsets.ModelViewSet):
     """
@@ -119,6 +139,20 @@ class CardViewSet(viewsets.ModelViewSet):
         response['Access-Control-Allow-Credentials']='true'
     
         return response
+
+
+class UserCardViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewset for the cards assigned to current user
+
+    """
+    serializer_class = CardSerializer
+    permission_classes = [IsCardMemberOrAdmin, IsAuthenticated]
+
+    def get_queryset(self):
+        card_assignee=Member.objects.get(users=self.request.user)
+        queryset = (Card.objects.filter(assignees = card_assignee))
+        return queryset
 
 
 class MemberViewSet(viewsets.ModelViewSet):
