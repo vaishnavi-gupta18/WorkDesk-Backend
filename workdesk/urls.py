@@ -11,6 +11,7 @@ router.register('project',ProjectViewSet)
 router.register('userproject',UserProjectViewSet,basename='userproject')
 router.register('usercard',UserCardViewSet,basename='usercard')
 router.register('List',ListViewSet)
+router.register('Card',CardViewSet)
 
 
 list_router = routers.NestedSimpleRouter(router, 'project', lookup='project')

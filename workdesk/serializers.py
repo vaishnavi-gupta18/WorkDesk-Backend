@@ -42,6 +42,16 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['id', 'member', 'card', 'date_created', 'body']
 
 
+class DetailedCommentSerializer(serializers.ModelSerializer):
+    """
+    ModelSerializer for Comment model
+    """
+    member = MemberSerializer(read_only=True)
+    class Meta:
+        model = Comment
+        fields = ['id', 'member', 'card', 'date_created', 'body']
+
+
 class CardSerializer(serializers.ModelSerializer):
     """
     ModelSerializer for Card model
@@ -49,6 +59,27 @@ class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
         fields = ['id', 'title', 'description', 'start_date', 'due_date', 'creator', 'assignees', 'list']
+
+
+class ShortListSerializer(serializers.ModelSerializer):
+    """
+    ModelSerializer for List model 
+    """
+    class Meta:
+        model = List
+        fields = ['id', 'title']
+
+
+class DetailedCardSerializer(serializers.ModelSerializer):
+    """
+    ModelSerializer for Card model with assignees details
+    """
+    comments_card= DetailedCommentSerializer(many=True, read_only=True)
+    assignees = MemberSerializer(many=True, read_only=True)
+    list = ShortListSerializer(read_only=True)
+    class Meta:
+        model = Card
+        fields = ['id', 'title', 'description', 'start_date', 'due_date', 'creator', 'assignees', 'list', 'comments_card']
 
 
 class ListSerializer(serializers.ModelSerializer):

@@ -13,7 +13,7 @@ from decouple import config
 from users.models import User
 from django.contrib.auth.models import Group
 from .models import Project, List, Member, Card, Comment
-from .serializers import GroupSerializer, UserSerializer, ProjectSerializer, ListSerializer, CardSerializer, MemberSerializer, CommentSerializer,ShortProjectSerializer, DetailedProjectSerializer
+from .serializers import GroupSerializer, UserSerializer, ProjectSerializer, ListSerializer, CardSerializer, DetailedCardSerializer, MemberSerializer, CommentSerializer,ShortProjectSerializer, DetailedProjectSerializer
 from .permissions import IsProjectMemberOrAdmin, IsListMemberOrAdmin, IsCardMemberOrAdmin, IsAdmin, IsOwnerorReadOnly
 
 
@@ -93,7 +93,7 @@ class UserProjectViewSet(viewsets.ModelViewSet):
     ModelViewset for all the projects of current user
 
     """
-    serializer_class = ProjectSerializer
+    serializer_class = DetailedProjectSerializer
     permission_classes = [IsProjectMemberOrAdmin, IsAuthenticated]
 
     def get_queryset(self):
@@ -126,8 +126,13 @@ class CardViewSet(viewsets.ModelViewSet):
     Create,Delete,Update a card
     """
     queryset = Card.objects.all()
-    serializer_class = CardSerializer
+    # serializer_class = CardSerializer
     permission_classes = [IsCardMemberOrAdmin, IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return DetailedCardSerializer
+        return CardSerializer
 
     def perform_create(self,serializer):
        card_creator=Member.objects.get(users=self.request.user)
