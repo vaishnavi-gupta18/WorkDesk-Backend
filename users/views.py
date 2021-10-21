@@ -94,7 +94,8 @@ def login_response(request):
         if data_request.status_code == 200:
             data = data_request.json()
         else:
-            return HttpResponse(status=token_request.status_code) 
+            return HttpResponse(status=token_request.status_code)
+        print(data) 
         roles = data["person"]["roles"]
         roles_check = False
         for i in range(len(roles)):

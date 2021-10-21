@@ -18,7 +18,7 @@ class Member(models.Model):
     fullname = models.CharField(max_length=100, blank=False)
     position = models.CharField(max_length=100, blank=False)
     year = models.CharField(max_length=100, blank=False)
-    display_picture = models.FileField(upload_to=None, max_length=254, null=True)
+    display_picture = models.CharField(max_length=254, null=True, blank=True)
     email_address = models.EmailField(max_length=254, blank=True)
 
     def __str__(self):
