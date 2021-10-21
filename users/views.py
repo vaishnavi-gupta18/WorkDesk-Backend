@@ -19,7 +19,7 @@ class UserBackend:
     """
     Backend to authenticate and return users.
     """
-    def authenticate(self, request, user_name, full_name, current_year):
+    def authenticate(self, request, user_name, full_name, current_year, email_add, display_pic):
         """
         Authenticate users.
 
@@ -43,7 +43,7 @@ class UserBackend:
                     position = 'Project Leader'
                 else:
                     position = 'Emeritus Coordinator'
-                Member.objects.create(users=user, fullname=full_name, year=current_year, position = position)
+                Member.objects.create(users=user, fullname=full_name, year=current_year, position = position, email_address = email_add, display_picture = display_pic)
         return user
   
     def get_user(self, user_id):
@@ -95,7 +95,6 @@ def login_response(request):
             data = data_request.json()
         else:
             return HttpResponse(status=token_request.status_code) 
-        
         roles = data["person"]["roles"]
         roles_check = False
         for i in range(len(roles)):
@@ -105,7 +104,10 @@ def login_response(request):
         if roles_check:
             user = authenticate(user_name=data["username"],
                                 full_name=data["person"]["fullName"],
-                                current_year=data["student"]["currentYear"])
+                                current_year=data["student"]["currentYear"],
+                                email_add=data["contactInformation"]["instituteWebmailAddress"],
+                                display_pic=data["person"]["displayPicture"],
+                                )
             if user.is_active:
                 user.save()
                 login(request, user)

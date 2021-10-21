@@ -30,7 +30,7 @@ class MemberSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Member
-        fields = ['id', 'users', 'fullname', 'position', 'year']
+        fields = ['id', 'users', 'fullname', 'position', 'year','email_address','display_picture']
 
 
 class CommentSerializer(serializers.ModelSerializer):
