@@ -1,4 +1,5 @@
 from django.http import response
+
 from django.shortcuts import render, redirect
 from django.http.response import Http404
 from django.http import HttpResponse
@@ -6,6 +7,7 @@ from django.views import generic
 from django.contrib.auth.views import LoginView
 
 from rest_framework import viewsets
+from rest_framework.parsers import MultiPartParser,FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -66,8 +68,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
             return DetailedProjectSerializer
         return ProjectSerializer
 
-
     def perform_create(self,serializer):
+       parser_classes = [MultiPartParser, FormParser]
        project_creator=Member.objects.get(users=self.request.user)
        serializer.save(creator = project_creator)
 

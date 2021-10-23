@@ -111,7 +111,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     lists = ListSerializer(many=True, read_only=True)
     class Meta:
         model = Project
-        fields = ['id', 'title', 'description', 'start_date', 'creator', 'members', 'status', 'is_public', 'lists']
+        fields = ['id', 'title', 'description', 'logo', 'start_date', 'creator', 'members', 'status', 'is_public', 'lists']
 
 
 class DetailedProjectSerializer(serializers.ModelSerializer):
@@ -122,7 +122,7 @@ class DetailedProjectSerializer(serializers.ModelSerializer):
     members = MemberSerializer(many=True, read_only=True)
     class Meta:
         model = Project
-        fields = ['id', 'title', 'description', 'start_date', 'creator', 'members', 'status', 'is_public', 'lists']
+        fields = ['id', 'title', 'description', 'logo', 'start_date', 'creator', 'members', 'status', 'is_public', 'lists']
 
 
 class ShortProjectSerializer(serializers.ModelSerializer):
@@ -132,4 +132,4 @@ class ShortProjectSerializer(serializers.ModelSerializer):
     members = MemberSerializer(many=True, read_only=True)
     class Meta:
         model = Project
-        fields = ['id', 'title', 'description', 'start_date', 'creator', 'members', 'status', 'is_public']
+        fields = ['id', 'title', 'description', 'logo', 'start_date', 'creator', 'members', 'status', 'is_public']

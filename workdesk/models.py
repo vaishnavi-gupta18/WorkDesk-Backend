@@ -33,6 +33,7 @@ class Project(models.Model):
     """
     title = models.CharField(max_length=100)
     description = RichTextField()
+    logo = models.ImageField(upload_to='images/', blank=True, null=True)
     start_date = models.DateTimeField(blank=False)
     creator = models.ForeignKey(to=Member,primary_key = False,on_delete=models.SET_NULL, null=True,related_name = 'project_creator')
     members = models.ManyToManyField(Member)
