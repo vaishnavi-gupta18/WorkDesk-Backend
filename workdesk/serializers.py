@@ -18,10 +18,20 @@ class UserSerializer(serializers.ModelSerializer):
     """
     ModelSerializer for User model
     """
-
     class Meta:
         model = User
         fields = ['id', 'username', 'groups', 'is_active']
+
+
+class DetailedUserSerializer(serializers.ModelSerializer):
+    """
+    ModelSerializer for User model including group details
+    """
+    groups = GroupSerializer(many=True, read_only=True)
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'groups', 'is_active']
+
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -56,9 +66,10 @@ class CardSerializer(serializers.ModelSerializer):
     """
     ModelSerializer for Card model
     """
+    comments_card= CommentSerializer(many=True, read_only=True)
     class Meta:
         model = Card
-        fields = ['id', 'title', 'description', 'start_date', 'due_date', 'creator', 'assignees', 'list']
+        fields = ['id', 'title', 'description', 'start_date', 'due_date', 'creator', 'assignees', 'list','comments_card']
 
 
 class ShortListSerializer(serializers.ModelSerializer):

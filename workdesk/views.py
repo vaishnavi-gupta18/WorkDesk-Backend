@@ -13,7 +13,7 @@ from decouple import config
 from users.models import User
 from django.contrib.auth.models import Group
 from .models import Project, List, Member, Card, Comment
-from .serializers import GroupSerializer, UserSerializer, ProjectSerializer, ListSerializer, CardSerializer, DetailedCardSerializer, MemberSerializer, CommentSerializer,ShortProjectSerializer, DetailedProjectSerializer
+from .serializers import GroupSerializer, UserSerializer, DetailedUserSerializer, ProjectSerializer, ListSerializer, CardSerializer, DetailedCardSerializer, MemberSerializer, CommentSerializer,ShortProjectSerializer, DetailedProjectSerializer
 from .permissions import IsProjectMemberOrAdmin, IsListMemberOrAdmin, IsCardMemberOrAdmin, IsAdmin, IsOwnerorReadOnly
 
 
@@ -35,8 +35,13 @@ class UserViewSet(viewsets.ModelViewSet):
     Enable or Disable a user
     """
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    # serializer_class = UserSerializer
     permission_classes = [IsAdmin, IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return DetailedUserSerializer
+        return UserSerializer
 
     def dispatch(self, *args, **kwargs):
         response = super(UserViewSet, self).dispatch(*args, **kwargs)
